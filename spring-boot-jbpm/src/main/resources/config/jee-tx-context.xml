@@ -19,10 +19,10 @@
     <property name="allowLocalTransactions" value="true" />
     <property name="driverProperties">
       <props>
-        <prop key="user">sa</prop>
-        <prop key="password">sa</prop>
-        <prop key="driverClassName">org.h2.Driver</prop>
-        <prop key="url">jdbc:h2:mem:jbpm</prop>
+        <prop key="user">jbpm</prop>
+        <prop key="password">jbpm</prop>
+        <prop key="driverClassName">com.mysql.jdbc.Driver</prop>
+        <prop key="url">jdbc:mysql://localhost/jbpm</prop>
       </props>
     </property>
   </bean>
