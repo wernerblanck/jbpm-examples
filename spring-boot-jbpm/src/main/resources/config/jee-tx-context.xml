@@ -22,7 +22,7 @@
         <prop key="user">sa</prop>
         <prop key="password">sa</prop>
         <prop key="driverClassName">org.h2.Driver</prop>
-        <prop key="url">jdbc:h2:mem:jbpm</prop>
+        <prop key="url">jdbc:h2:~/jbpm</prop>
       </props>
     </property>
   </bean>

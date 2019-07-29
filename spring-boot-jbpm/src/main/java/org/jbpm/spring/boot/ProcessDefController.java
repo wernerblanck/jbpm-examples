@@ -46,10 +46,12 @@ public class ProcessDefController {
 	}
 	
 	@RequestMapping(value = "/new", method = RequestMethod.POST)
-	public Long newProcessInstance(@RequestParam String deploymentId, @RequestParam String processId,
-			@RequestParam Map<String,String> allRequestParams) {
-		
-		long processInstanceId = processService.startProcess(deploymentId, processId, new HashMap<String, Object>(allRequestParams));
+	public Long newProcessInstance() {
+//			@RequestParam String deploymentId, @RequestParam String processId,
+//			@RequestParam Map<String,String> allRequestParams) {
+//		
+		//long processInstanceId = processService.startProcess(deploymentId, processId, new HashMap<String, Object>(allRequestParams));
+		long processInstanceId = processService.startProcess("org.mastertheboss.kieserver:hello-kie-server:1.0", "hello", new HashMap<String, Object>());
 		
 		return processInstanceId;
  

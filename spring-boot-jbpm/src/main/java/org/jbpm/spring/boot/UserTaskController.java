@@ -14,6 +14,7 @@ import org.kie.internal.query.QueryFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -32,11 +33,11 @@ public class UserTaskController {
 	@Autowired
 	private DefinitionService definitionService;
 	
-	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public Collection<TaskSummary> getTasks() {		
+	@RequestMapping(value = "/{owner}", method = RequestMethod.GET)
+	public Collection<TaskSummary> getTasks(@PathVariable("owner") String owner) {		
 	    String userId = getAuthUser();
 	      
-		Collection<TaskSummary> tasks = runtimeDataService.getTasksAssignedAsPotentialOwner(userId, new QueryFilter(0, 100));
+		Collection<TaskSummary> tasks = runtimeDataService.getTasksAssignedAsPotentialOwner(owner, new QueryFilter(0, 100));
 
 		return tasks;
  
@@ -53,8 +54,8 @@ public class UserTaskController {
  
 	}
 	
-	@RequestMapping(value = "/complete", method = RequestMethod.POST)
-	public String completeTask(@RequestParam String id, @RequestParam Map<String,String> allRequestParams) {		
+	@RequestMapping(value = "/complete/{owner}/{id}", method = RequestMethod.POST)
+	public String completeTask(@PathVariable("id") String id, @PathVariable("owner") String owner, Map<String,String> allRequestParams) {		
 		String userId = getAuthUser();
 		
 		Map<String, Object> data = new HashMap<String, Object>();
@@ -76,7 +77,7 @@ public class UserTaskController {
 		}
 		
 		try {
-			userTaskService.complete(Long.parseLong(id), userId, data);
+			userTaskService.complete(Long.parseLong(id), owner, data);
 			return "Task " + id + " completed successfully";
 		} catch (Exception e) {
 			return "Task " + id + " complete failed due to " + e.getMessage();
@@ -106,14 +107,15 @@ public class UserTaskController {
 		} catch (Exception e) {
 			return "Task " + id + " release failed due to " + e.getMessage();
 		}
- 
+
 	}
 	
-	@RequestMapping(value = "/start", method = RequestMethod.POST)
-	public String startTask(@RequestParam String id) {
+	@RequestMapping(value = "/start/{owner}/{id}", method = RequestMethod.POST)
+	public String startTask(@PathVariable("owner") String owner, @PathVariable("id") String id) {
 		String userId = getAuthUser();
 		try {
-			userTaskService.start(Long.parseLong(id), userId);
+			userTaskService.start(Long.parseLong(id), owner);
+			completeTask(id, owner, new HashMap<String, String>());
 			return "Task " + id + " started successfully";
 		} catch (Exception e) {
 			return "Task " + id + " start failed due to " + e.getMessage();
